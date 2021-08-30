@@ -1,0 +1,10 @@
+﻿[
+  {
+    "outputFile": "Content/CSS/Main.css",
+    "inputFile": "Content/CSS/Main.scss"
+  },
+  {
+    "outputFile": "Library/CSS/Toolbox.css",
+    "inputFile": "Library/CSS/Toolbox.scss"
+  }
+]

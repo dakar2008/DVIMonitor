@@ -1,0 +1,214 @@
+﻿@{
+    ViewBag.Title = "Home";
+}
+<div class="col-xs-12 nospacing padding5">
+    <div class="col-xs-12 nospacing padding10 text-center">
+        <h1>Dansk Vinimport - Overvågning</h1>
+    </div>
+    <div class="col-xs-12 nospacing">
+        <div class="col-xs-12 col-sm-4 nospacing padding5">
+            <div class="col-xs-12 nospacing infoframe">
+                <div class="col-xs-12 nospacing padding10 top">
+                    <h3>Temperatur og fugtighed - Lager</h3>
+                </div>
+                <div class="col-xs-12 nospacing content">
+                    <div class="col-xs-12 nospacing">
+                        <div class="col-xs-12 col-sm-6 nospacing padding5">
+                            <p>Temperatur:</p>
+                        </div>
+                        <div class="col-xs-12 col-sm-6 nospacing padding5 text-center">
+                            <p id="InsideTemp"></p>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 nospacing">
+                        <div class="col-xs-12 col-sm-6 nospacing padding5">
+                            <p>Fugtighed:</p>
+                        </div>
+                        <div class="col-xs-12 col-sm-6 nospacing padding5 text-center">
+                            <p id="InsideHumidity"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 nospacing infoframe">
+                <div class="col-xs-12 nospacing padding10 top">
+                    <h3>Temperatur og fugtighed - Udenfor</h3>
+                </div>
+                <div class="col-xs-12 nospacing content">
+                    <div class="col-xs-12 nospacing">
+                        <div class="col-xs-12 col-sm-6 nospacing padding5">
+                            <p>Temperatur:</p>
+                        </div>
+                        <div class="col-xs-12 col-sm-6 nospacing padding5 text-center">
+                            <p id="OutsideTemp"></p>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 nospacing">
+                        <div class="col-xs-12 col-sm-6 nospacing padding5">
+                            <p>Fugtighed:</p>
+                        </div>
+                        <div class="col-xs-12 col-sm-6 nospacing padding5 text-center">
+                            <p id="OutsideHumidity"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-12 col-sm-4 nospacing padding5">
+            <div class="col-xs-12 nospacing infoframe">
+                <div class="col-xs-12 nospacing padding10 top">
+                    <h3>Dato / Tid - København</h3>
+                </div>
+                <div class="col-xs-12 nospacing padding5 content text-center">
+                    <span id="DateTimeCPH"></span>
+                </div>
+            </div>
+            <div class="col-xs-12 nospacing infoframe">
+                <div class="col-xs-12 nospacing padding10 top">
+                    <h3>Dato / Tid - London</h3>
+                </div>
+                <div class="col-xs-12 nospacing padding5 content text-center">
+                    <span id="DateTimeLondon"></span>
+                </div>
+            </div>
+            <div class="col-xs-12 nospacing infoframe">
+                <div class="col-xs-12 nospacing padding10 top">
+                    <h3>Dato / Tid - Singapore</h3>
+                </div>
+                <div class="col-xs-12 nospacing padding5 content text-center">
+                    <span id="DateTimeSingapore"></span>
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-12 col-sm-4 nospacing padding5">
+            <div class="col-xs-12 nospacing infoframe">
+                <div class="col-xs-12 nospacing padding10 top">
+                    <h3>Lagerstatus - Varer under minimum</h3>
+                </div>
+                <div class="col-xs-12 nospacing padding5 content text-center" id="ItemsUnderMin_Content">
+                </div>
+            </div>
+            <div class="col-xs-12 nospacing infoframe">
+                <div class="col-xs-12 nospacing padding10 top">
+                    <h3>Lagerstatus - Varer over maksimum</h3>
+                </div>
+                <div class="col-xs-12 nospacing padding5 content text-center" id="ItemsOverMax_Content">
+                </div>
+            </div>
+            <div class="col-xs-12 nospacing infoframe">
+                <div class="col-xs-12 nospacing padding10 top">
+                    <h3>Lagerstatus - Mest solgt i dag</h3>
+                </div>
+                <div class="col-xs-12 nospacing padding5 content text-center" id="ItemsMostSold_Content">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts{
+    <script>
+        $(document).ready(function () {
+            $.getJSON('/Home/GetDVITempData', null, function (data) {
+                $("#InsideTemp").text(data.InsideTemp);
+                $("#InsideHumidity").text(data.InsideHumidity);
+                $("#OutsideTemp").text(data.OutsideTemp);
+                $("#OutsideHumidity").text(data.OutsideHumidity);
+            });
+            $.getJSON('/Home/GetDVIItemsUnderMin', null, function (data) {
+                $.each(data, function (indexInArray, valueOfElement) {
+                    $("#ItemsUnderMin_Content").append('<p>' + valueOfElement + '</p>');
+                });
+            });
+            $.getJSON('/Home/GetDVIItemsOverMax', null, function (data) {
+                $.each(data, function (indexInArray, valueOfElement) {
+                    $("#ItemsOverMax_Content").append('<p>' + valueOfElement + '</p>');
+                });
+            });
+            $.getJSON('/Home/GetDVIItemsMostSold', null, function (data) {
+                $.each(data, function (indexInArray, valueOfElement) {
+                    $("#ItemsMostSold_Content").append('<p>' + valueOfElement + '</p>');
+                });
+            });
+            setInterval(function () {
+                $.getJSON('/Home/GetDVITempData', null, function (data) {
+                    $("#InsideTemp").text(data.InsideTemp);
+                    $("#InsideHumidity").text(data.InsideHumidity);
+                    $("#OutsideTemp").text(data.OutsideTemp);
+                    $("#OutsideHumidity").text(data.OutsideHumidity);
+                });
+                $.getJSON('/Home/GetDVIItemsUnderMin', null, function (data) {
+                    $.each(data, function (indexInArray, valueOfElement) {
+                        $("#ItemsUnderMin_Content").append('<p>' + valueOfElement + '</p>');
+                    });
+                });
+                $.getJSON('/Home/GetDVIItemsOverMax', null, function (data) {
+                    $.each(data, function (indexInArray, valueOfElement) {
+                        $("#ItemsOverMax_Content").append('<p>' + valueOfElement + '</p>');
+                    });
+                });
+                $.getJSON('/Home/GetDVIItemsMostSold', null, function (data) {
+                    $.each(data, function (indexInArray, valueOfElement) {
+                        $("#ItemsMostSold_Content").append('<p>' + valueOfElement + '</p>');
+                    });
+                });
+            }, 60000);
+            setInterval(function () {
+                calcTime(2, "DateTimeCPH");
+                calcTime(1, "DateTimeLondon");
+                calcTime(8, "DateTimeSingapore");
+            }, 100);
+        });
+        function calcTime(offset, id) {
+
+            // create Date object for current location
+            var date = new Date();
+
+            // convert to msec
+            // add local time zone offset 
+            // get UTC time in msec
+            var utc = date.getTime() + (date.getTimezoneOffset() * 60000);
+
+            // create new Date object for different city
+            // using supplied offset
+            var newDate = new Date(utc + (3600000 * offset));
+
+            var cph_hours;
+            var cph_minutes;
+            var cph_seconds;
+            var cph_month;
+            var cph_date;
+            if (newDate.getHours() < 10) {
+                cph_hours = "0" + newDate.getHours();
+            }
+            else {
+                cph_hours = newDate.getHours();
+            }
+            if (newDate.getMinutes() < 10) {
+                cph_minutes = "0" + newDate.getMinutes();
+            }
+            else {
+                cph_minutes = newDate.getMinutes();
+            }
+            if (newDate.getSeconds() < 10) {
+                cph_seconds = "0" + newDate.getSeconds();
+            }
+            else {
+                cph_seconds = newDate.getSeconds();
+            }
+            if (newDate.getMonth() < 10) {
+                var tempmonth = newDate.getMonth() + 1;
+                cph_month = "0" + tempmonth;
+            }
+            else {
+                cph_month = newDate.getMonth() + 1;
+            }
+            if (newDate.getDate() < 10) {
+                cph_date = "0" + newDate.getDate();
+            }
+            else {
+                cph_date = newDate.getDate();
+            }
+            $("#" + id).text(cph_date + "-" + cph_month + "-" + newDate.getFullYear() + " " + cph_hours + ":" + cph_minutes + ":" + cph_seconds);
+        }
+    </script>
+}

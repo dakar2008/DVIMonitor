@@ -1,0 +1,42 @@
+﻿body {
+    background: #000;
+    color: #FFF;
+}
+h1 {
+    color: #FFF;
+    font-weight: bold;
+    margin-bottom: 20px !important;
+    font-size: 75px;
+}
+.infoframe {
+    border: #4f4f4f dotted 1px;
+    margin-bottom: 10px !important;
+
+    .top {
+        background: #0a0a0a;
+        border-bottom: #4f4f4f dotted 1px;
+
+        h3 {
+            color: #a1a1a1;
+            font-weight: bold;
+            text-align: center;
+            font-size: 35px;
+        }
+    }
+
+    .content {
+        font-size: 28px;
+
+        #DateTimeCPH, #DateTimeLondon, #DateTimeSingapore {
+            font-size: 35px;
+        }
+    }
+
+    #ItemsUnderMin_Content {
+        color: #ff0000;
+    }
+
+    #ItemsOverMax_Content {
+        color: #4cff00;
+    }
+}
